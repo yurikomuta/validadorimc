@@ -1,0 +1,84 @@
+/* Custom styles for the Python Code Validator */
+
+/* Add some spacing around the main content */
+body {
+    padding-bottom: 60px;
+}
+
+/* Style for CodeMirror editor */
+.CodeMirror {
+    border: 1px solid var(--bs-secondary);
+    border-radius: 0.25rem;
+    font-family: monospace;
+    height: auto;
+    min-height: 300px;
+}
+
+/* Custom styling for the cards */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-weight: 500;
+}
+
+/* Add a subtle hover effect to suggestions */
+.list-group-item {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Footer styling */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: var(--bs-dark);
+    z-index: 1000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.25rem;
+    }
+    
+    .lead {
+        font-size: 1rem;
+    }
+    
+    .footer {
+        position: relative;
+        height: auto;
+    }
+}
+
+/* Animation for the validation button */
+#validateBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+#validateBtn {
+    transition: all 0.3s ease;
+}
+
+/* Styling for the validation results icons */
+#resultsTitle i {
+    vertical-align: middle;
+}
+
+/* Style the file input */
+input[type="file"] {
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
+}

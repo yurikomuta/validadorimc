@@ -1,0 +1,288 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mb-4">
+            <div class="card-header bg-primary bg-gradient">
+                <h2 class="card-title m-0"><i class="fas fa-code me-2"></i>Python Code Validator</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">Upload a Python file or paste your code below to validate syntax and get improvement suggestions.</p>
+                
+                <form id="codeForm" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="codeFile" class="form-label">Upload Python File(s)</label>
+                                <input class="form-control" type="file" id="codeFile" name="file" accept=".py" multiple>
+                                <small class="form-text text-muted">Você pode selecionar múltiplos arquivos para análise simultânea.</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="pythonVersion" class="form-label">Python Version</label>
+                                <select class="form-select" id="pythonVersion" name="python_version">
+                                    <option value="3" selected>Python 3.x</option>
+                                    <option value="2">Python 2.x</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="codeEditor" class="form-label">Or paste your Python code here:</label>
+                        <textarea id="codeEditor" name="code" class="form-control" rows="10"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" id="clearBtn" class="btn btn-secondary me-2">
+                            <i class="fas fa-eraser me-2"></i>Limpar Código
+                        </button>
+                        <button type="button" id="validateBtn" class="btn btn-primary">
+                            <i class="fas fa-check-circle me-2"></i>Validate Code
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Results Panel (hidden by default) -->
+        <div class="card mb-4" id="resultsPanel" style="display: none;">
+            <div class="card-header bg-gradient" id="resultsHeader">
+                <h3 class="card-title m-0" id="resultsTitle">Validation Results</h3>
+            </div>
+            <div class="card-body">
+                <div id="validationMessage" class="alert"></div>
+                
+                <div id="errorDetails" style="display: none;">
+                    <h4>Error Details</h4>
+                    <div class="alert alert-danger">
+                        <p id="errorLineText"><strong>Line:</strong> <span id="errorLine"></span></p>
+                        <p id="errorMessageText"><strong>Error:</strong> <span id="errorMessage"></span></p>
+                    </div>
+                </div>
+                
+                <!-- Skill Level Analysis Section -->
+                <div id="skillLevelSection" style="display: none;">
+                    <h4>Nível de Programação</h4>
+                    <div class="card mb-3 border-info">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h5 class="card-title" id="skillLevelTitle">Nível: <span id="skillLevel">-</span></h5>
+                                    <p class="card-text">Pontuação: <span id="skillScore">-</span></p>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <div class="progress">
+                                        <div id="skillProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%;" 
+                                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IMC Analysis Section -->
+                    <div id="imcAnalysisSection" style="display: none;">
+                        <div class="card mb-3 border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Análise da Calculadora de IMC</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert" id="imcLevelAlert">
+                                    <h5 class="alert-heading" id="imcLevelTitle">Avaliação de Critérios</h5>
+                                    <p id="imcLevelDescription">Este código não foi identificado como uma calculadora de IMC.</p>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card h-100">
+                                            <div class="card-header">Critério Crítico</div>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div id="criticalCheck" class="me-2">
+                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-0">Cálculo funcional do IMC</p>
+                                                    </div>
+                                                </div>
+                                                <small class="text-muted">Código deve calcular o IMC corretamente usando peso/(altura²) e mostrar o resultado.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card h-100">
+                                            <div class="card-header">Critério Desejável</div>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div id="desirableCheck" class="me-2">
+                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-0">Classificação do IMC</p>
+                                                    </div>
+                                                </div>
+                                                <small class="text-muted">Deve mostrar a classificação do IMC (ex: abaixo do peso, normal, sobrepeso, obesidade)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Características Detectadas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="codeFeatures">
+                                <!-- Code features will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="suggestionsSection" style="display: none;">
+                    <h4>Improvement Suggestions</h4>
+                    <div class="list-group" id="suggestionsList">
+                        <!-- Suggestions will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Previous Analyses Section -->
+    {% if analyses %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary bg-gradient">
+                    <h2 class="card-title m-0"><i class="fas fa-history me-2"></i>Análises Anteriores</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Arquivo</th>
+                                    <th>Válido</th>
+                                    <th>Nível</th>
+                                    <th>Pontuação</th>
+                                    <th>Calculadora IMC</th>
+                                    <th>Critério IMC</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for analysis in analyses %}
+                                <tr>
+                                    <td>{{ analysis.filename }}</td>
+                                    <td>
+                                        {% if analysis.is_valid %}
+                                            <span class="badge bg-success">Válido</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inválido</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ analysis.skill_level or "-" }}</td>
+                                    <td>{{ analysis.skill_score or "-" }}</td>
+                                    <td>
+                                        {% if analysis.is_imc_calculator %}
+                                            <span class="badge bg-info">Sim</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Não</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if analysis.is_imc_calculator %}
+                                            {% if analysis.imc_critical_criteria and analysis.imc_desirable_criteria %}
+                                                <span class="badge bg-success">Desejável</span>
+                                            {% elif analysis.imc_critical_criteria %}
+                                                <span class="badge bg-primary">Crítico</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Não Atende</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ analysis.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('view_analysis', analysis_id=analysis.id) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </a>
+                                        <form action="{{ url_for('delete_analysis', analysis_id=analysis.id) }}" method="POST" style="display: inline;">
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-3 text-end">
+                        <button id="exportIndexCsvBtn" class="btn btn-success">
+                            <i class="fas fa-file-csv me-2"></i>Exportar para CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to export table data to CSV
+    function exportTableToCSV() {
+        const table = document.querySelector("table");
+        if (!table) return;
+        
+        // Get all rows
+        const rows = table.querySelectorAll("tr");
+        let csvContent = "data:text/csv;charset=utf-8,";
+        
+        // Iterate through rows
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("th, td");
+            const rowData = [];
+            
+            // Get text content from each cell, handling badges
+            cells.forEach(cell => {
+                // Check if cell contains a badge
+                const badge = cell.querySelector(".badge");
+                if (badge) {
+                    rowData.push(badge.textContent.trim());
+                } else {
+                    // Skip the "Ações" column (last column)
+                    if (!cell.querySelector("a.btn")) {
+                        rowData.push(cell.textContent.trim());
+                    }
+                }
+            });
+            
+            // Add the row to CSV content
+            csvContent += rowData.join(",") + "\r\n";
+        });
+        
+        // Create a download link and trigger it
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "analises_python_" + new Date().toISOString().slice(0, 10) + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+{% endblock %}
