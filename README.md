@@ -84,3 +84,6 @@ Para código que não é uma calculadora IMC, a pontuação é baseada em sua co
 ## Exportação de Dados
 
 A aplicação permite exportar as análises armazenadas para arquivo CSV através do botão "Exportar para CSV" nas tabelas de resultados.
+
+<img width="1320" height="732" alt="image" src="https://github.com/user-attachments/assets/9eabd4a9-0a00-492e-b759-90875a5d648f" />
+
