@@ -1,6 +1,13 @@
 # Validador de Código Python
 
+### Problema
+Correção de atividades de somativas de mais de 100 alunos a cada finalização do curso de 60 horas. Cada professor precisavam de vários dias para organizar o code review e repassar o feedback de cada aluno.
+
+### Solução
 Um sistema web para validação e análise de código Python, com ênfase em avaliação de habilidades de programação e análise específica para calculadoras de IMC (Índice de Massa Corporal).
+
+## Resultado
+Redução de 50% no tempo empregado para a tarefa com custo operacional muito baixo por execução.
 
 ## Funcionalidades
 
